@@ -6,19 +6,19 @@ const router = express.Router()
 
 
 router.get("/get-all-rental", async (req, res) => {
-  const rental = await rental.find().sort("-dateOut");
+  const rental = await Rental.find().sort("-dateOut");
   res.send(rental);
 });
 
 
-router.post('/create-rentals', async(req, res) =>{
+router.post('/create-all-rentals', async(req, res) =>{
     const {error} = validate(req.body)
     if (error) return res.status(400).send(error.details[0].message);
 
     const customer = await Customer.findById(req.body.customerId)
     if (!customer) return res.status(400).send('invalid customer')
 
-     const movie = await Movie.findById(req.body.movieId)
+     let movie = await Movie.findById(req.body.movieId)
     if (!movie) return res.status(400).send('invalid movie')
 
     if (movie.numberInStock === 0) return res.status(404).send('movie is out of stock')
@@ -37,22 +37,23 @@ router.post('/create-rentals', async(req, res) =>{
              title: movie.title,
              dailyRentalRate: movie.dailyRentalRate
         },
-        rentalFee: request.body.rentalFee
+        rentalFee: req.body.rentalFee
     })
 
     rental = await rental.save()
     movie.numberInStock--;
     movie = await movie.save()
-    res.json({
-    status: "success",
-    message: "rental created successfully",
-  });
+  //   res.json({
+  //   status: "success",
+  //   message: "rental created successfully",
+
+  // });
+  res.send(rental)
 });
 
  router.get("/get-single-rental/:id", async (req, res) => {
-   const rental = await rental.findById(req.params.id);
-   if (!rental)
-     return res.status(404).send("the rentalwith the given id not found");
+   const rental = await Rental.findById(req.params.id);
+   if (!rental) return res.status(404).send("the rentalwith the given id not found");
 
    res.send(rental);
  });

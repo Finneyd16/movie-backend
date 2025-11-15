@@ -88,8 +88,7 @@ router.delete("/delete-movie/:id", async (req, res) => {
 
    const movies = await Movie.find({ "genre._id": genreId });
 
-   if (!movies || movies.length === 0)
-     return res.status(404).send("No movies found for this genre.");
+   if (!movies || movies.length === 0) return res.status(404).send("No movies found for this genre.");
 
    res.json(movies);
  });

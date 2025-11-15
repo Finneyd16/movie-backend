@@ -5,6 +5,8 @@ const genre = require('./routes/genre')
 const customer = require('./routes/customers')
 const movie = require('./routes/movies')
 const rental = require('./routes/rentals')
+const user = require('./routes/users')
+const auth = require('./routes/auth')
 
 
 mongoose.connect("mongodb://localhost/moviedatabase")
@@ -16,7 +18,9 @@ app.use('/api/moviedocuments/genre', genre)
 app.use('/api/movieDocuments/customers', customer)
 app.use("/api/movieDocuments/movies", movie);
 app.use("/api/movieDocuments/rentals", rental);
+app.use("/api/movieDocuments/users", user);
+app.use("/api/movieDocuments/login", auth);
 
-const port = process.env.PORT || 3001
+const port = process.env.PORT || 3003
 
 app.listen(port,console.log(`listening on port${port}...`))
